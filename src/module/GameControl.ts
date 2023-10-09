@@ -1,6 +1,7 @@
 import Food from './Food'
 import ScorePane from './ScorePane'
 import Snake from './Snake'
+import _ from 'lodash'
 
 export default class GamgControl {
   food: Food
@@ -16,10 +17,27 @@ export default class GamgControl {
   // 初始化游戏 也就是开始游戏的方法
 
   init() {
-    document.addEventListener('keydown', this.keydownHandle)
+    document.addEventListener(
+      'keydown',
+      _.throttle(this.keydownHandle, 300 - (this.scorePane.level - 2) * 30)
+    )
     this.move()
   }
   keydownHandle = (e: KeyboardEvent) => {
+    console.log(e.key)
+
+    if (this.direction === 'ArrowRight' && e.key === 'ArrowLeft') {
+      return
+    }
+    if (this.direction === 'ArrowLeft' && e.key === 'ArrowRight') {
+      return
+    }
+    if (this.direction === 'ArrowUp' && e.key === 'ArrowDown') {
+      return
+    }
+    if (this.direction === 'ArrowDown' && e.key === 'ArrowUp') {
+      return
+    }
     this.direction = e.key
   }
 
@@ -58,7 +76,7 @@ export default class GamgControl {
     }
 
     this.isAlive &&
-      setTimeout(() => this.move(), 100 - (this.scorePane.level - 2) * 30)
+      setTimeout(() => this.move(), 300 - (this.scorePane.level - 2) * 30)
   }
 
   eatFood(X: number, Y: number) {
