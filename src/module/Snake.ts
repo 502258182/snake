@@ -21,10 +21,27 @@ export default class Snake {
   }
   // 设置蛇头坐标
   set X(value: number) {
+    // 如果蛇的X轴坐标没有变化就不去改变位置
+    if (this.X === value) {
+      return
+    }
+
+    if (value < 0 || value > 290) {
+      throw new Error('蛇撞墙了 Game Over')
+    }
+
     this.head.style.left = value + 'px'
   }
   // 设置蛇头坐标
   set Y(value: number) {
+    // 如果蛇的X轴坐标没有变化就不去改变位置
+    if (this.Y === value) {
+      return
+    }
+
+    if (value < 0 || value > 290) {
+      throw new Error('蛇撞墙了 Game Over')
+    }
     this.head.style.top = value + 'px'
   }
   // 给蛇添加长度

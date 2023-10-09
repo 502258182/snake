@@ -6,7 +6,8 @@ export default class GamgControl {
   food: Food
   scorePane: ScorePane
   snake: Snake
-  direction = ''
+  direction = 'ArrowRight'
+  isAlive = true
   constructor() {
     this.food = new Food()
     this.scorePane = new ScorePane()
@@ -16,8 +17,59 @@ export default class GamgControl {
 
   init() {
     document.addEventListener('keydown', this.keydownHandle)
+    this.move()
   }
   keydownHandle = (e: KeyboardEvent) => {
     this.direction = e.key
+  }
+
+  move() {
+    // 获取蛇的当前坐标
+    let X = this.snake.X
+    let Y = this.snake.Y
+
+    switch (this.direction) {
+      case 'ArrowUp':
+        //上
+        Y -= 10
+        break
+      case 'ArrowRight':
+        //右
+        X += 10
+        break
+      case 'ArrowDown':
+        //下
+        Y += 10
+        break
+      case 'ArrowLeft':
+        //左
+        X -= 10
+        break
+    }
+
+    this.eatFood(X, Y)
+
+    try {
+      this.snake.X = X
+      this.snake.Y = Y
+    } catch (e) {
+      alert((e as Error).message)
+      this.isAlive = false
+    }
+
+    this.isAlive &&
+      setTimeout(() => this.move(), 100 - (this.scorePane.level - 2) * 30)
+  }
+
+  eatFood(X: number, Y: number) {
+    if (X === this.food.X && Y === this.food.Y) {
+      // 当蛇吃到食物时
+      // 1. 重置食物的位置
+      this.food.change()
+      // 2. 加分
+      this.scorePane.addScore()
+      // 3. 增加蛇的长度
+      this.snake.addBody()
+    }
   }
 }
