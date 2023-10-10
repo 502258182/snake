@@ -24,8 +24,10 @@ export default class GamgControl {
     this.move()
   }
   keydownHandle = (e: KeyboardEvent) => {
-    console.log(e.key)
-
+    let key = ['ArrowRight', 'ArrowUp', 'ArrowLeft', 'ArrowDown']
+    if (key.indexOf(e.key) === -1) {
+      return
+    }
     if (this.direction === 'ArrowRight' && e.key === 'ArrowLeft') {
       return
     }
